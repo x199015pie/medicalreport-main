@@ -26,7 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-aclient = AsyncOpenAI(api_key=os.getenv("git add .", ""))
+aclient = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class Medication(BaseModel):
     name: Any = ""
