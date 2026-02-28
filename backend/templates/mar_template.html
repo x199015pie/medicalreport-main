@@ -1,54 +1,75 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <style>
         @page {
             size: A4 portrait;
-            margin: 5mm; 
+            margin: 5mm 5mm 5mm 20mm;
         }
 
-        body { font-family: sans-serif; font-size: 9px; color: #333; }
-        
-        table { 
-            width: 100%; 
-            border-collapse: collapse; 
-            margin-top: 5px; 
-            table-layout: fixed; 
+        body {
+            font-family: sans-serif;
+            font-size: 9px;
+            color: #333;
         }
-        
-        tbody td { 
-            border: 1px solid #000; 
-            padding: 2px 1px; 
-            text-align: center; 
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 5px;
+            table-layout: fixed;
+        }
+
+        tbody td {
+            border: 1px solid #000;
+            padding: 2px 1px;
+            text-align: center;
             vertical-align: middle;
-            height: 26px !important; 
+            height: 26px !important;
         }
-        
+
         thead th {
-            border: 1px solid #000; 
-            padding: 2px 1px; 
-            text-align: center; 
+            border: 1px solid #000;
+            padding: 2px 1px;
+            text-align: center;
             vertical-align: middle;
         }
-        
-        .col-med { width: 30%; text-align: left; padding-left: 4px; font-size: 9px; } 
-        
+
+        .col-med {
+            width: 30%;
+            text-align: left;
+            padding-left: 4px;
+            font-size: 11px;
+        }
+
         .med-name-box {
-            max-height: 22px; 
-            line-height: 11px; 
-            overflow: hidden; 
-            word-wrap: break-word; 
+            max-height: 22px;
+            line-height: 11px;
+            overflow: hidden;
+            word-wrap: break-word;
             overflow-wrap: break-word;
         }
 
-        .col-qty { width: 5%; font-size: 8px; } 
-        .col-day { font-size: 7px; } 
+        .col-qty {
+            width: 5%;
+            font-size: 8px;
+        }
 
-        tr { page-break-inside: avoid; } 
-        
-        .patient-page { page-break-after: always; padding-bottom: 10px; }
-        
+        .col-day {
+            font-size: 7px;
+        }
+
+        tr {
+            page-break-inside: avoid;
+        }
+
+        .patient-page {
+            page-break-after: always;
+            padding-bottom: 10px;
+        }
+
         .time-divider {
             background-color: #e2e8f0;
             font-weight: bold;
@@ -56,87 +77,102 @@
             padding-left: 8px !important;
             font-size: 11px;
             text-transform: uppercase;
-            height: 20px !important; 
+            height: 20px !important;
         }
-        
+
         .empty-row td {
             color: #94a3b8;
-            height: 26px !important; 
+            height: 26px !important;
         }
 
         /* ✨ 針對底部排版的特製 CSS */
-        .layout-table { margin-top: 15px; }
+        .layout-table {
+            margin-top: 15px;
+        }
+
         /* 只消除外層排版表格的邊框，不影響內部的簽名格 */
-        .layout-table > tbody > tr > td { border: none !important; } 
-        
-        .signature-section h3 { margin: 0 0 4px 0; font-size: 11px; }
-        .signature-table { table-layout: fixed; margin-top: 0; width: 100%; }
-        .signature-table td { 
-            text-align: left; 
-            vertical-align: top; 
-            padding: 4px; 
-            height: 25px !important; 
-            width: 33.33%; 
+        .layout-table>tbody>tr>td {
+            border: none !important;
+        }
+
+        .signature-section h3 {
+            margin: 0 0 4px 0;
+            font-size: 11px;
+        }
+
+        .signature-table {
+            table-layout: fixed;
+            margin-top: 0;
+            width: 100%;
+        }
+
+        .signature-table td {
+            text-align: left;
+            vertical-align: top;
+            padding: 4px;
+            height: 25px !important;
+            width: 33.33%;
         }
     </style>
 </head>
+
 <body>
     {% for patient in patients %}
     <div class="patient-page">
-        <h2 style="margin-bottom: 5px; font-size: 16px;">Medication Administration Record (MAR)</h2>
-        <p style="margin-top: 0; font-size: 10px;">
-            <strong>Patient:</strong> {{ patient.patient_name }} &nbsp;|&nbsp; 
-            <strong>DOB:</strong> {{ patient.dob }} &nbsp;|&nbsp; 
+        <h2 style="margin-bottom: 5px; font-size: 20px;">Medication Administration Record (MAR)</h2>
+        <p style="margin-top: 0; font-size: 16px;">
+            <strong>Patient:</strong> {{ patient.patient_name }} &nbsp;|&nbsp;
+            <strong>DOB:</strong> {{ patient.dob }} &nbsp;|&nbsp;
             <strong>Date:</strong> {{ year }}-{{ "{:02d}".format(month) }}
         </p>
-        
+
         <table>
             <thead>
                 <tr>
                     <th class="col-med">Medication</th>
                     <th class="col-qty">Qty</th>
                     {% for day in days %}
-                        <th class="col-day">{{ day }}</th>
+                    <th class="col-day">{{ day }}</th>
                     {% endfor %}
                 </tr>
             </thead>
             <tbody>
-                
+
                 {% for slot in ['Morning(0800)', 'Noon(1200)', 'Dinner(1700)', 'Evening(2100)'] %}
-                    
-                    <tr>
-                        <td colspan="{{ 2 + days|length }}" class="time-divider">
-                            {{ slot }}
-                        </td>
-                    </tr>
 
-                    {% set ns = namespace(found=false) %}
-                    {% for med in patient.medications %}
-                        {% if med.time == slot %}
-                            {% set ns.found = true %}
-                            <tr>
-                                <td class="col-med">
-                                    <div class="med-name-box">
-                                        <strong>{{ med.name }}</strong>
-                                    </div>
-                                </td>
-                                <td><strong>{{ med.quantity }}</strong></td>
-                                {% for day in days %}
-                                    <td></td>
-                                {% endfor %}
-                            </tr>
-                        {% endif %}
+                <tr>
+                    <td colspan="{{ 2 + days|length }}" class="time-divider">
+                        {{ slot }}
+                    </td>
+                </tr>
+
+                {% set ns = namespace(found=false) %}
+                {% for med in patient.medications %}
+                {% if med.time == slot %}
+                {% set ns.found = true %}
+                <tr>
+                    <td class="col-med">
+                        <div class="med-name-box">
+                            <strong>{{ med.name }}</strong>
+                        </div>
+                    </td>
+                    <td><strong>{{ med.quantity }}</strong></td>
+                    {% for day in days %}
+                    <td></td>
                     {% endfor %}
+                </tr>
+                {% endif %}
+                {% endfor %}
 
-                    {% if not ns.found %}
-                        <tr class="empty-row">
-                            <td class="col-med" style="text-align: center; color: #aaa;">--</td>
-                            <td></td>
-                            {% for day in days %}
-                                <td></td>
-                            {% endfor %}
-                        </tr>
-                    {% endif %}
+                {% if not ns.found %}
+                <tr class="empty-row">
+                    <td class="col-med" style="text-align: center; color: #aaa;">--</td>
+                    <td></td>
+                    {% for day in days %}
+                    <td></td>
+                    {% endfor %}
+                </tr>
+                {% endif %}
 
                 {% endfor %}
 
@@ -152,22 +188,35 @@
                             <table class="signature-table">
                                 <tbody>
                                     <tr>
-                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________ <strong>Title:</strong> _____</td>
-                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________ <strong>Title:</strong> _____</td>
-                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________ <strong>Title:</strong> _____</td>
+                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________
+                                            <strong>Title:</strong> _____
+                                        </td>
+                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________
+                                            <strong>Title:</strong> _____
+                                        </td>
+                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________
+                                            <strong>Title:</strong> _____
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________ <strong>Title:</strong> _____</td>
-                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________ <strong>Title:</strong> _____</td>
-                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________ <strong>Title:</strong> _____</td>
+                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________
+                                            <strong>Title:</strong> _____
+                                        </td>
+                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________
+                                            <strong>Title:</strong> _____
+                                        </td>
+                                        <td><strong>Initials:</strong> _______ <strong>Signature:</strong> _____________
+                                            <strong>Title:</strong> _____
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </td>
-                    
+
                     <td style="width: 25%; vertical-align: bottom; padding: 0 0 0 10px !important;">
-                        <div style="border: 1px solid #000; padding: 4px 6px; font-size: 7px; line-height: 1.3; text-align: left; font-weight: bold; background-color: #fff;">
+                        <div
+                            style="border: 1px solid #000; padding: 4px 6px; font-size: 7px; line-height: 1.3; text-align: left; font-weight: bold; background-color: #fff;">
                             1 - ABSENT WITH MEDS<br>
                             2 - DRUG REFUSED<br>
                             3 - ABSENT FROM HOME<br>
@@ -186,4 +235,5 @@
     </div>
     {% endfor %}
 </body>
+
 </html>

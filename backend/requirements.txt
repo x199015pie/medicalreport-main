@@ -8,5 +8,4 @@ pypdf
 python-multipart
 python-dotenv
 gunicorn
-uvicorn
 pdfplumber

@@ -54,8 +54,7 @@ async def generate_mar(data: BulkMARRequest):
         report_year = 2026
         report_month = 1
 
-    _, num_days = calendar.monthrange(report_year, report_month)
-    days_list = list(range(1, num_days + 1))
+    days_list = list(range(1, 32))  # 固定顯示 1-31 號
     
     time_order = {
         "Morning(0800)": 1,
