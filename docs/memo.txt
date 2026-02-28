@@ -1,0 +1,26 @@
+Open your two terminals
+One is for frontend, one is for backend
+
+- medicalreport-main -> frontend
+cd frontend
+npm install
+npm run dev
+
+- medicalreport-main -> backend
+cd backend
+source venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+
+
+To push the code to github
+Make sure you are in "medicalreport-main" （(base) chienyu@Chien-N03 medicalreport-main %）
+
+If you are in "frontend" or "backend"（(base) chienyu@Chien-N03 frontend %』or 『(base) chienyu@Chien-N03 backend %）, 
+type 「cd ..」
+
+If you are in "medicalreport-main" （(base) chienyu@Chien-N03 medicalreport-main %）,
+
+git add .
+git commit -m 'whatever your comment'
+git push
